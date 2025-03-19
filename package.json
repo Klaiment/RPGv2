@@ -1,0 +1,21 @@
+{
+  "name": "projetrpgv2",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Klaiment/RPGv2#readme",
+  "bugs": {
+    "url": "https://github.com/Klaiment/RPGv2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Klaiment/RPGv2.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
