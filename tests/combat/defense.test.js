@@ -37,10 +37,8 @@ function testPlayerDefend() {
   // Vérifier que le joueur a perdu moins de PV grâce à la défense
   const actualDamage = characterHpBefore - character.stats.hp
   const expectedDamageWithoutDefense = Math.max(1, monster.attack - character.stats.defense)
-  \
-  assert.strictEqual(actualDamage &lt
-  expectedDamageWithoutDefense, true, "Les dégâts devraient être réduits"
-  )
+
+  assert.strictEqual(actualDamage < expectedDamageWithoutDefense, true, "Les dégâts devraient être réduits")
 
   // Vérifier que l'état de défense est réinitialisé après l'attaque du monstre
   assert.strictEqual(combat.isPlayerDefending, false, "L'état de défense devrait être réinitialisé")
