@@ -26,10 +26,50 @@ export class Dungeon {
       }
     }
 
+    // S'assurer que la salle de départ a au moins une sortie
     const startRoom = this.getRoomAt(0, 0)
     startRoom.monster = null
     startRoom.treasure = null
     startRoom.visited = true
+
+    // Garantir au moins une sortie depuis la salle de départ
+    const directions = ["N", "E", "S", "O"]
+    const randomDirection = directions[Math.floor(Math.random() * directions.length)]
+    startRoom.walls[randomDirection] = false
+
+    // Ouvrir le passage dans la salle adjacente
+    let adjacentX = 0
+    let adjacentY = 0
+
+    switch (randomDirection) {
+      case "N":
+        adjacentY = 1
+        break
+      case "S":
+        adjacentY = -1
+        break
+      case "E":
+        adjacentX = 1
+        break
+      case "O":
+        adjacentX = -1
+        break
+    }
+
+    // Vérifier que la salle adjacente existe
+    if (adjacentX >= 0 && adjacentX < this.width && adjacentY >= 0 && adjacentY < this.height) {
+      const oppositeDirection = {
+        N: "S",
+        S: "N",
+        E: "O",
+        O: "E",
+      }[randomDirection]
+
+      const adjacentRoom = this.getRoomAt(adjacentX, adjacentY)
+      if (adjacentRoom) {
+        adjacentRoom.walls[oppositeDirection] = false
+      }
+    }
 
     this.ensureConnectivity()
   }
@@ -110,23 +150,6 @@ export class Dungeon {
     }
 
     return newX >= 0 && newX < this.width && newY >= 0 && newY < this.height
-  }
-}
-
-```tsx file="models/dungeonRoom.js"
-export class DungeonRoom {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.walls = {
-      N: Math.random() > 0.7,
-      S: Math.random() > 0.7,
-      E: Math.random() > 0.7,
-      O: Math.random() > 0.7,
-    };
-    this.monster = null;
-    this.treasure = null;
-    this.visited = false;
   }
 }
 

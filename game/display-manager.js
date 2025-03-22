@@ -16,10 +16,28 @@ export function displayCurrentState(gameState) {
   }
 
   console.log("\nSorties disponibles:")
-  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "N")) console.log("- Nord (N)")
-  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "S")) console.log("- Sud (S)")
-  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "E")) console.log("- Est (E)")
-  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "O")) console.log("- Ouest (O)")
+  let sortiesAffichees = false
+
+  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "N")) {
+    console.log("- Nord (N)")
+    sortiesAffichees = true
+  }
+  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "S")) {
+    console.log("- Sud (S)")
+    sortiesAffichees = true
+  }
+  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "E")) {
+    console.log("- Est (E)")
+    sortiesAffichees = true
+  }
+  if (gameState.dungeon.canMove(gameState.player.x, gameState.player.y, "O")) {
+    console.log("- Ouest (O)")
+    sortiesAffichees = true
+  }
+
+  if (!sortiesAffichees) {
+    console.log("Aucune sortie disponible. Vous êtes piégé !")
+  }
 }
 
 export function displayInventory(gameState) {
