@@ -1,6 +1,6 @@
 import { Combat } from "../models/combat.js"
 import { Item } from "../models/item.js"
-import { useItem } from "./inventory-handler.js"
+import { InventoryHandler } from "./inventory-handler.js"
 import { askQuestion } from "./game-loop.js"
 
 export async function handleCombat(gameState, rl) {
@@ -18,6 +18,7 @@ export async function handleCombat(gameState, rl) {
   const combat = new Combat(gameState.player, monster)
 
   let combatEnded = false
+  let itemUsed = false // Initialize itemUsed outside the loop
   while (!combatEnded) {
     console.log("\nQue voulez-vous faire?")
     console.log("1. Attaquer")
@@ -27,6 +28,8 @@ export async function handleCombat(gameState, rl) {
 
     const choice = await askQuestion(rl, "Votre choix: ")
 
+    itemUsed = false // Reset itemUsed for each turn
+
     switch (choice) {
       case "1":
         combat.playerAttack()
@@ -35,7 +38,8 @@ export async function handleCombat(gameState, rl) {
         combat.playerDefend()
         break
       case "3":
-        await useItem(gameState, rl)
+        const inventoryHandler = new InventoryHandler()
+        itemUsed = await inventoryHandler.useItem(gameState, rl)
         break
       case "4":
         if (Math.random() > 0.5) {
@@ -72,7 +76,9 @@ export async function handleCombat(gameState, rl) {
       break
     }
 
-    combat.monsterAttack()
+    if (!itemUsed) {
+      combat.monsterAttack()
+    }
 
     if (gameState.player.stats.hp <= 0) {
       console.log("Vous avez été vaincu...")

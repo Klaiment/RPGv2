@@ -1,9 +1,12 @@
+import { ICharacter } from "./interfaces/icharacter.js"
 import { CharacterStats } from "./characterStats.js"
 import { CharacterEquipment } from "./characterEquipment.js"
 import { CharacterLevelUp } from "./characterLevelUp.js"
 
-export class Character {
+export class Character extends ICharacter {
   constructor(name, characterClass) {
+    super(name, characterClass)
+
     this.name = name
     this.characterClass = characterClass
     this.level = 1

@@ -1,18 +1,18 @@
-export class Combat {
+import { ICombat } from "./interfaces/icombat.js"
+import { DamageCalculator } from "./combat/damageCalculator.js"
+
+export class Combat extends ICombat {
   constructor(player, monster) {
+    super(player, monster)
+
     this.player = player
     this.monster = monster
     this.isPlayerDefending = false
+    this.damageCalculator = new DamageCalculator()
   }
 
   playerAttack() {
-    let damage = this.player.stats.strength
-
-    if (this.player.equipment.weapon) {
-      damage += this.player.equipment.weapon.effect.strength || 0
-    }
-
-    damage = Math.max(1, damage - this.monster.defense)
+    const damage = this.damageCalculator.calculatePlayerDamage(this.player, this.monster)
 
     this.monster.hp -= damage
 
@@ -27,24 +27,13 @@ export class Combat {
   }
 
   monsterAttack() {
-    let damage = this.monster.attack
-
-    let defense = this.player.stats.defense
-
-    if (this.player.equipment.armor) {
-      defense += this.player.equipment.armor.effect.defense || 0
-    }
-
-    if (this.isPlayerDefending) {
-      defense *= 1.5
-      this.isPlayerDefending = false
-    }
-
-    damage = Math.max(1, damage - defense)
+    const damage = this.damageCalculator.calculateMonsterDamage(this.monster, this.player, this.isPlayerDefending)
 
     this.player.stats.hp -= damage
 
     console.log(`Le ${this.monster.name} vous attaque et inflige ${damage} points de dégâts!`)
+
+    this.isPlayerDefending = false
   }
 }
 
