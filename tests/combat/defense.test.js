@@ -10,7 +10,7 @@ function createTestMonster() {
     level: 1,
     hp: 20,
     maxHp: 20,
-    attack: 5,
+    attack: 10,
     defense: 3,
     defeated: false,
   }
@@ -21,21 +21,24 @@ function testPlayerDefend() {
   const monster = createTestMonster()
   const combat = new Combat(character, monster)
 
-  combat.playerDefend()
+  const characterHpBeforeNormal = character.stats.hp
+  combat.monsterAttack()
+  const normalDamage = characterHpBeforeNormal - character.stats.hp
 
+  character.stats.hp = characterHpBeforeNormal
+
+  combat.playerDefend()
   assert.strictEqual(combat.isPlayerDefending, true, "L'état de défense devrait être activé")
 
-  const characterHpBefore = character.stats.hp
-
+  const characterHpBeforeDefense = character.stats.hp
   combat.monsterAttack()
+  const damageWithDefense = characterHpBeforeDefense - character.stats.hp
 
-  const actualDamage = characterHpBefore - character.stats.hp
-  const expectedDamageWithoutDefense = Math.max(1, monster.attack - character.stats.defense)
-
-  assert.strictEqual(actualDamage < expectedDamageWithoutDefense, true, "Les dégâts devraient être réduits")
+  assert.strictEqual(damageWithDefense < normalDamage, true, "Les dégâts devraient être réduits avec la défense")
 
   assert.strictEqual(combat.isPlayerDefending, false, "L'état de défense devrait être réinitialisé")
 
+  console.log(`Dégâts normaux: ${normalDamage}, Dégâts avec défense: ${damageWithDefense}`)
   console.log("✅ Test : Défense du joueur - RÉUSSI")
 }
 

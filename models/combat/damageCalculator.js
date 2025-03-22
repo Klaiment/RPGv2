@@ -18,7 +18,7 @@ export class DamageCalculator {
     }
 
     if (isDefending) {
-      defense *= 1.5
+      return Math.max(0, Math.floor((damage - defense) * 0.5))
     }
 
     return Math.max(1, damage - defense)
