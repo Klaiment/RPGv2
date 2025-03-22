@@ -1,3 +1,7 @@
+import { DungeonRoom } from "./dungeonRoom.js"
+import { MonsterGenerator } from "./monsterGenerator.js"
+import { TreasureGenerator } from "./treasureGenerator.js"
+
 export class Dungeon {
   constructor(width, height) {
     this.width = width
@@ -9,25 +13,13 @@ export class Dungeon {
   generate() {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        const room = {
-          x,
-          y,
-          walls: {
-            N: Math.random() > 0.7,
-            S: Math.random() > 0.7,
-            E: Math.random() > 0.7,
-            O: Math.random() > 0.7,
-          },
-          monster: null,
-          treasure: null,
-          visited: false,
-        }
+        const room = new DungeonRoom(x, y)
 
         const roomContent = Math.random()
         if (roomContent < 0.3) {
-          room.monster = this.generateMonster(Math.floor(Math.random() * 3) + 1)
+          room.monster = MonsterGenerator.generateMonster(Math.floor(Math.random() * 3) + 1)
         } else if (roomContent < 0.5) {
-          room.treasure = this.generateTreasure()
+          room.treasure = TreasureGenerator.generateTreasure()
         }
 
         this.rooms.push(room)
@@ -40,67 +32,6 @@ export class Dungeon {
     startRoom.visited = true
 
     this.ensureConnectivity()
-  }
-
-  generateMonster(level) {
-    const monsterTypes = [
-      { name: "Gobelin", hp: 20, maxHp: 20, attack: 5, defense: 3 },
-      { name: "Squelette", hp: 25, maxHp: 25, attack: 6, defense: 2 },
-      { name: "Loup", hp: 15, maxHp: 15, attack: 7, defense: 1 },
-      { name: "Orc", hp: 35, maxHp: 35, attack: 8, defense: 4 },
-      { name: "Zombie", hp: 30, maxHp: 30, attack: 6, defense: 5 },
-    ]
-
-    const monsterType = monsterTypes[Math.floor(Math.random() * monsterTypes.length)]
-
-    return {
-      name: monsterType.name,
-      level,
-      hp: monsterType.hp * level,
-      maxHp: monsterType.hp * level,
-      attack: monsterType.attack * level,
-      defense: monsterType.defense * level,
-      defeated: false,
-    }
-  }
-
-  generateTreasure() {
-    const gold = Math.floor(Math.random() * 50) + 10
-
-    const items = []
-    if (Math.random() > 0.5) {
-      items.push({
-        name: "Potion de soin",
-        type: "potion",
-        description: "Restaure 20 points de vie.",
-        effect: { hp: 20 },
-      })
-    }
-
-    if (Math.random() > 0.7) {
-      items.push({
-        name: "Potion de mana",
-        type: "potion",
-        description: "Restaure 15 points de mana.",
-        effect: { mp: 15 },
-      })
-    }
-
-    if (Math.random() > 0.9) {
-      items.push({
-        name: "Épée en fer",
-        type: "weapon",
-        description: "Une épée solide qui augmente votre force de 5.",
-        effect: { strength: 5 },
-      })
-    }
-
-    return {
-      gold,
-      items,
-      description: "Un coffre contenant des trésors!",
-      collected: false,
-    }
   }
 
   ensureConnectivity() {
@@ -179,6 +110,23 @@ export class Dungeon {
     }
 
     return newX >= 0 && newX < this.width && newY >= 0 && newY < this.height
+  }
+}
+
+```tsx file="models/dungeonRoom.js"
+export class DungeonRoom {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.walls = {
+      N: Math.random() > 0.7,
+      S: Math.random() > 0.7,
+      E: Math.random() > 0.7,
+      O: Math.random() > 0.7,
+    };
+    this.monster = null;
+    this.treasure = null;
+    this.visited = false;
   }
 }
 

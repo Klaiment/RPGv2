@@ -1,3 +1,7 @@
+import { startGame } from "./game/game-loop.js"
+
+// Point d'entrée principal
+startGame()
 import readline from "readline"
 import fs from "fs/promises"
 import path from "path"
@@ -526,5 +530,5 @@ async function gameLoop() {
   rl.close()
 }
 
-gameLoop()
+//gameLoop()
 
